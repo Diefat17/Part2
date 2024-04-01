@@ -1,10 +1,10 @@
 const Course = ({course}) => {
+  const temp = course.parts
+  
   return (
     <>
       <h1>{course.name}</h1>
-      <p>{course.parts[0].name} {course.parts[0].exercises}</p>
-      <p>{course.parts[1].name} {course.parts[1].exercises}</p>
-      <p>{course.parts[2].name} {course.parts[2].exercises}</p>
+      {temp.map(course => <p key={course.id}>{course.name} {course.exercises}</p>)}
     </>
     
   )
@@ -33,7 +33,7 @@ const App = () => {
       }
     ]
   }
-  console.log(course.parts[0].name)
+  //console.log(course.parts[0].name)
   return <Course course={course} />
 }
 
