@@ -1,11 +1,12 @@
 const Course = ({course}) => {
-  let temp = 0
-  const copy = (course.parts).map(tem => temp += tem.exercises)
+
+  const copy = (course.parts).map(tem => tem.exercises)
+
   return (
     <>
       <h1>{course.name}</h1>
       {(course.parts).map(course => <p key={course.id}>{course.name} {course.exercises}</p>)}
-      <h2>total of {temp} exercises</h2>
+      <h2>total of {copy.reduce((s, p) => s + p)} exercises</h2>
     </>
     
   )
@@ -40,7 +41,7 @@ const App = () => {
       }
     ]
   }
-  //console.log(course.parts[0].name)
+
   return <Course course={course} />
 }
 
