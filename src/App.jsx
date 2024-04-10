@@ -6,12 +6,11 @@ const Nombre = ({name}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas' },{ name: 'Arto Hellafdads' },{ name: 'Arto Hedsfdslladfggs' }
   ]) 
   const [newName, setNewName] = useState('')
 
   const handlePersonChange = (event) => {
-    //console.log(event.target.value)
     setNewName(event.target.value)
   }
 
@@ -21,8 +20,12 @@ const App = () => {
     const nameObject = {
       name: newName,
     }
-    //setPersons(persons.concat(nameObject))
-    setPersons(persons.concat(nameObject))
+    
+    if(!persons.map(user => user.name).includes(newName)){
+      setPersons(persons.concat(nameObject))
+    } else {
+      alert(`${newName} is already adde to phonebook`)
+    }
     setNewName('')
   }
 
