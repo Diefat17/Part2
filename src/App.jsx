@@ -6,7 +6,7 @@ const Nombre = ({name}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' },{ name: 'Arto Hellafdads' },{ name: 'Arto Hedsfdslladfggs' }
+    { name: 'Arto Hellas' }
   ]) 
   const [newName, setNewName] = useState('')
 
