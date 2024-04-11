@@ -69,7 +69,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <Numbers temp={persons.filter(word => word.name.includes(filter))}></Numbers>
+      <Numbers temp={persons.filter(word => word.name.toLowerCase().includes(filter.toLowerCase()))}></Numbers>
     </div>
   )
 }
