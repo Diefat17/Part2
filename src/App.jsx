@@ -4,8 +4,26 @@ const Nombre = ({name, number}) => {
   return <li>{name} {number}</li>
 }
 
-const Numbers = ({temp}) => {
+const Persons = ({temp}) => {
   return <>{temp.map(t => <Nombre key={t.id} name={t.name} number={t.number}></Nombre>)}</>
+}
+
+const Filter = ({handleFilterChange, filter}) => {
+  return <input onChange={handleFilterChange} value={filter}/>
+}
+
+const PersonForm = ({addPerson, handlePersonChange, newName, handleNumberChange, newNumber}) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>
+       <div>name: <input onChange={handlePersonChange} value={newName}/></div>
+        <div>number: <input onChange={handleNumberChange} value={newNumber}/></div>
+      </div>        
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
 }
 
 const App = () => {
@@ -57,19 +75,11 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       filter shown with
-      <input onChange={handleFilterChange} value={filter}/>
+      <Filter handleFilterChange={handleFilterChange} filter={filter}></Filter>
       <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-         <div>name: <input onChange={handlePersonChange} value={newName}/></div>
-          <div>number: <input onChange={handleNumberChange} value={newNumber}/></div>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm addPerson={addPerson} handlePersonChange={handlePersonChange} newName={newName} handleNumberChange={handleNumberChange} newNumber={newNumber}></PersonForm>
       <h2>Numbers</h2>
-      <Numbers temp={persons.filter(word => word.name.toLowerCase().includes(filter.toLowerCase()))}></Numbers>
+      <Persons temp={persons.filter(word => word.name.toLowerCase().includes(filter.toLowerCase()))}></Persons>
     </div>
   )
 }
