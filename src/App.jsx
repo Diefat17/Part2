@@ -1,83 +1,96 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import Note from './components/Note'
-import noteService from './services/notes'
+import personService from './services/notes'
+
+const Nombre = ({name, number}) => {
+  return <li>{name} {number}</li>
+}
+
+const Persons = ({temp}) => {
+  return <>{temp.map(t => <Nombre key={t.id} name={t.name} number={t.number}></Nombre>)}</>
+}
+
+const Filter = ({handleFilterChange, filter}) => {
+  return <input onChange={handleFilterChange} value={filter}/>
+}
+
+const PersonForm = ({addPerson, handlePersonChange, newName, handleNumberChange, newNumber}) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>
+       <div>name: <input onChange={handlePersonChange} value={newName}/></div>
+        <div>number: <input onChange={handleNumberChange} value={newNumber}/></div>
+      </div>        
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
 
 const App = () => {
-  const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(true)
+  const [persons, setPersons] = useState( []) 
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    noteService
+    personService
       .getAll()
       .then(initialNotes => {
-        setNotes(initialNotes)
+        setPersons(initialNotes)
       })
   }, [])
 
-  const addNote = (event) => {
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value)
+  }
+
+  const handlePersonChange = (event) => {
+    setNewName(event.target.value)
+    
+  }
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
+
+
+  const addPerson = (event) => {
     event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5,
+    const nameObject = {
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1
     }
+    
+    if(!persons.map(user => user.name).includes(newName)){
+      setPersons(persons.concat(nameObject))
+      personService
+          .create(nameObject)
+          .then(initialPersons => {
+            setPersons(persons.concat(initialPersons))
+          })
 
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-      })
-  
+
+    } else {
+      alert(`${newName} is already adde to phonebook`)
+    }
+    setNewName('')
+    setNewNumber('')
+    
   }
-
-  const toggleImportanceOf = id => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-  
-    noteService
-      .update(id, changedNote).then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-  
-      .catch(error => {
-        alert(
-          `the note '${note.content}' was already deleted from server`
-        )
-        setNotes(notes.filter(n => n.id !== id))
-      })
-  }
-
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
-  }
-
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important)
-  
 
   return (
     <div>
-      <h1>Notes</h1>
-      <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all' }
-        </button>
-      </div>      
-      <ul>
-        {notesToShow.map(note => 
-          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>
-        )}
-      </ul>
-      <form onSubmit={addNote}>
-      <input
-          value={newNote}
-          onChange={handleNoteChange}
-        />
-        <button type="submit">save</button>
-      </form> 
+      <h2>Phonebook</h2>
+      filter shown with
+      <Filter handleFilterChange={handleFilterChange} filter={filter}></Filter>
+      <h2>add a new</h2>
+      <PersonForm addPerson={addPerson} handlePersonChange={handlePersonChange} newName={newName} handleNumberChange={handleNumberChange} newNumber={newNumber}></PersonForm>
+      <h2>Numbers</h2>
+      <Persons temp={persons.filter(word => word.name.toLowerCase().includes(filter.toLowerCase()))}></Persons>
     </div>
   )
 }
