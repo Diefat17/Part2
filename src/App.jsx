@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import personService from './services/notes'
 
-const Nombre = ({name, number}) => {
-  return <li>{name} {number}</li>
+const Nombre = ({name, number, deletePerson, personId}) => {
+  return <li>{name} {number} <button onClick={() => deletePerson(personId)} >Delete</button></li>
 }
 
-const Persons = ({temp}) => {
-  return <>{temp.map(t => <Nombre key={t.id} name={t.name} number={t.number}></Nombre>)}</>
+const Persons = ({temp, deletePerson}) => {
+  return <>{temp.map(t => <Nombre key={t.id} name={t.name} number={t.number} deletePerson={deletePerson} personId={t.id}></Nombre>)}</>
 }
 
 const Filter = ({handleFilterChange, filter}) => {
@@ -55,6 +55,18 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const deletePerson = id => {
+    
+    if(id != undefined){
+      //console.log(persons.map(p => p.id == id))
+      const temp = persons.filter(p => p.id != id)
+      window.confirm(`Delete ${persons.id}?`)
+      personService
+      .deleteContact(id)
+      setPersons(temp)
+    }
+  }
+
 
 
   const addPerson = (event) => {
@@ -62,7 +74,6 @@ const App = () => {
     const nameObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1
     }
     
     if(!persons.map(user => user.name).includes(newName)){
@@ -88,9 +99,9 @@ const App = () => {
       filter shown with
       <Filter handleFilterChange={handleFilterChange} filter={filter}></Filter>
       <h2>add a new</h2>
-      <PersonForm addPerson={addPerson} handlePersonChange={handlePersonChange} newName={newName} handleNumberChange={handleNumberChange} newNumber={newNumber}></PersonForm>
+      <PersonForm addPerson={addPerson} handlePersonChange={handlePersonChange} newName={newName} handleNumberChange={handleNumberChange} newNumber={newNumber} ></PersonForm>
       <h2>Numbers</h2>
-      <Persons temp={persons.filter(word => word.name.toLowerCase().includes(filter.toLowerCase()))}></Persons>
+      <Persons temp={persons.filter(word => word.name.toLowerCase().includes(filter.toLowerCase()))} deletePerson={deletePerson}></Persons>
     </div>
   )
 }
