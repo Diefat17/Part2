@@ -6,7 +6,6 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
-  //new try
 
   useEffect(() => {
     noteService
