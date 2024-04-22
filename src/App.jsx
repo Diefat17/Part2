@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import personService from './services/notes'
+import Notification from './components/Notification'
 
 const Nombre = ({name, number, deletePerson, personId}) => {
   return <li>{name} {number} <button onClick={() => deletePerson(personId)} >Delete</button></li>
@@ -32,6 +33,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [addedMessage, setAddedMessage] = useState('Waiting to add')
 
   useEffect(() => {
     personService
@@ -83,8 +85,12 @@ const App = () => {
           .then(initialPersons => {
             setPersons(persons.concat(initialPersons))
           })
-
-
+      setAddedMessage(
+        `Added ${newName}`
+      )
+      setTimeout(() => {
+        setAddedMessage(null)
+      }, 5000)
     } else {
       alert(`${newName} is already adde to phonebook`)
     }
@@ -96,6 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={addedMessage} />
       filter shown with
       <Filter handleFilterChange={handleFilterChange} filter={filter}></Filter>
       <h2>add a new</h2>
