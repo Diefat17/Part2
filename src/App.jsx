@@ -7,6 +7,7 @@ const Nombre = ({name, number, deletePerson, personId}) => {
 }
 
 const Persons = ({temp, deletePerson}) => {
+  if(temp.length == 0)return <></>
   return <>{temp.map(t => <Nombre key={t.id} name={t.name} number={t.number} deletePerson={deletePerson} personId={t.id}></Nombre>)}</>
 }
 
