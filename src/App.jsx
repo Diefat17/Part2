@@ -75,6 +75,7 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     const nameObject = {
+      id: persons.length + 1,
       name: newName,
       number: newNumber,
     }
