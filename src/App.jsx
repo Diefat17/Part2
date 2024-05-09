@@ -61,7 +61,7 @@ const App = () => {
   const deletePerson = id => {
     
     if(id != undefined){
-      //console.log(persons.map(p => p.id == id))
+      console.log(id)
       const temp = persons.filter(p => p.id != id)
       window.confirm(`Delete ${persons.id}?`)
       personService
@@ -75,7 +75,7 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     const nameObject = {
-      id: persons.length + 1,
+      id: Math.floor(Math.random() *100),
       name: newName,
       number: newNumber,
     }
